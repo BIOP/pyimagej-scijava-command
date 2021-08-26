@@ -335,6 +335,18 @@ public class PyCommandInfo extends CommandInfo {
                 return defaultValue;
             }
             try {
+                if (objectClass.equals(int.class)) {
+                    return (T) Integer.valueOf(0);
+                }
+                if (objectClass.equals(double.class)) {
+                    return (T) Double.valueOf(0);
+                }
+                if (objectClass.equals(float.class)) {
+                    return (T) Float.valueOf(0);
+                }
+                if (objectClass.equals(boolean.class)) {
+                    return (T) Boolean.FALSE;
+                }
                 if (objectClass.equals(Integer.class)) {
                     return (T) Integer.valueOf(0);
                 }
@@ -343,6 +355,9 @@ public class PyCommandInfo extends CommandInfo {
                 }
                 if (objectClass.equals(Float.class)) {
                     return (T) Float.valueOf(0);
+                }
+                if (objectClass.equals(Boolean.class)) {
+                    return (T) Boolean.FALSE;
                 }
                 final Object dummy = objectClass.newInstance();
                 @SuppressWarnings("unchecked")

@@ -372,9 +372,6 @@ public class PyCommandInfo extends CommandInfo {
 
     }
 
-
-
-
     @Override
     public Class<? extends Command> loadClass() throws InstantiableException {
         return creator.get().getClass();

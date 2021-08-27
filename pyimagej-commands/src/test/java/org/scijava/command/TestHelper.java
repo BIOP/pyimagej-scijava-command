@@ -32,7 +32,7 @@ import net.imagej.ImageJ;
 
 public class TestHelper {
 
-    public static void closeFijiAndBdvs(ImageJ ij) {
+    public static void closeFiji(ImageJ ij) {
         try {
 
             // Closes ij context

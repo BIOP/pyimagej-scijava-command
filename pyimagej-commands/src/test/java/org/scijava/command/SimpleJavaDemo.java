@@ -48,6 +48,6 @@ public class SimpleJavaDemo {
 
     @After
     public void closeFiji() {
-        TestHelper.closeFijiAndBdvs(ij);
+        TestHelper.closeFiji(ij);
     }
 }

@@ -28,6 +28,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 public class SimpleJavaDemo {
 
@@ -41,7 +42,7 @@ public class SimpleJavaDemo {
                 .name("pyimagej.MyCommand")
                 .input("name", String.class)
                 .input("repeat", Integer.class)
-                .input("image", ImagePlus.class)
+                //.input("image", ImagePlus.class)
                 .output("greetings", String.class)
                 .menuPath("Plugins>DemoPyCommand")
                 .function(inputs -> {
@@ -50,7 +51,7 @@ public class SimpleJavaDemo {
                         System.out.println("Repeat!");
                     }
                     String greetings = "Hello "+inputs.get("name")+"!";
-                    ((ImagePlus)inputs.get("image")).close();
+                    //((ImagePlus)inputs.get("image")).close();
                     out.put("greetings", greetings);
                     return out;
                 })
@@ -58,7 +59,11 @@ public class SimpleJavaDemo {
 
         ij.ui().showUI();
 
-        ij.command().run("pyimagej.MyCommand", true);
+        Future<CommandModule> module = ij.command().run("pyimagej.MyCommand", true);
+
+        DefaultCommandService dcs;
+
+        System.out.println(module);
 
     }
 

@@ -4,3 +4,5 @@
 /.idea/
 /target/
 *.iml
+/notebooks/.ipynb_checkpoints
+*.releaseBackup

@@ -33,6 +33,7 @@ import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -380,10 +381,13 @@ public class PyCommandInfo extends CommandInfo {
                 if (objectClass.equals(Boolean.class)) {
                     return (T) Boolean.FALSE;
                 }
-                final Object dummy = objectClass.newInstance();
-                @SuppressWarnings("unchecked")
-                final T value = (T) dummy;
-                return value;
+                if (hasParameterlessPublicConstructor(objectClass)) {
+                    final Object dummy = objectClass.newInstance();
+                    @SuppressWarnings("unchecked") final T value = (T) dummy;
+                    return value;
+                } else {
+                    return null;
+                }
             }
             catch (final InstantiationException | IllegalAccessException exc)
             {
@@ -391,6 +395,16 @@ public class PyCommandInfo extends CommandInfo {
             }
         }
 
+    }
+
+    private static boolean hasParameterlessPublicConstructor(Class<?> clazz) {
+        for (Constructor<?> constructor : clazz.getConstructors()) {
+            // In Java 7-, use getParameterTypes and check the length of the array returned
+            if (constructor.getParameterCount() == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -435,6 +449,38 @@ public class PyCommandInfo extends CommandInfo {
     @Override
     public CommandModuleItem<?> getInput(final String name) {
         return (CommandModuleItem<?>) inputMap.get(name);
+    }
+
+    @Override
+    public String toString(){
+
+
+        /*if (objectClass.equals(int.class)) {
+        }
+        if (objectClass.equals(double.class)) {
+            return (T) Double.valueOf(0);
+        }
+        if (objectClass.equals(float.class)) {
+            return (T) Float.valueOf(0);
+        }
+        if (objectClass.equals(boolean.class)) {
+            return (T) Boolean.FALSE;
+        }
+        if (objectClass.equals(Integer.class)) {
+            return (T) Integer.valueOf(0);
+        }
+        if (objectClass.equals(Double.class)) {
+            return (T) Double.valueOf(0);
+        }
+        if (objectClass.equals(Float.class)) {
+            return (T) Float.valueOf(0);
+        }
+        if (objectClass.equals(Boolean.class)) {
+            return (T) Boolean.FALSE;
+        }*/
+        return super.toString();
+
+        //else return "Undefined"
     }
 
 }

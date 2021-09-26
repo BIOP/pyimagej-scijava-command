@@ -80,8 +80,8 @@
 	</issueManagement>
 
 	<ciManagement>
-		<system>Travis CI</system>
-		<url>https://travis-ci.com/BIOP/pyimagej-scijava-command</url>
+		<system>GitHub Actions</system>
+		<url>https://github.com/BIOP/pyimagej-scijava-command/actions</url>
 	</ciManagement>
 
 	<properties>

@@ -68,7 +68,7 @@
 	</repositories>
 
 	<scm>
-		<connection>scm:git:git://github.com/BIOP/pyimagej-scijava-command</connection>
+		<connection>scm:git:https://github.com/BIOP/pyimagej-scijava-command</connection>
 		<developerConnection>scm:git:git@github.com:BIOP/pyimagej-scijava-command</developerConnection>
 		<url>https://github.com/BIOP/pyimagej-scijava-command</url>
 	  <tag>HEAD</tag>

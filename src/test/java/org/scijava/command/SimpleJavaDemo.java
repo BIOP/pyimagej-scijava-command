@@ -21,14 +21,16 @@
  */
 package org.scijava.command;
 
-import ij.ImagePlus;
 import net.imagej.ImageJ;
 import org.junit.After;
 import org.junit.Test;
+import org.scijava.module.Module;
+import org.scijava.processor.PyPreprocessor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 public class SimpleJavaDemo {
 
@@ -59,9 +61,18 @@ public class SimpleJavaDemo {
 
         ij.ui().showUI();
 
-        Future<CommandModule> module = ij.command().run("pyimagej.MyCommand", true);
+        // Adds a custom preprocessor
 
-        DefaultCommandService dcs;
+        Consumer<Module> moduleInputLogger = (module) -> {
+            System.out.println(module.getInfo().getName());
+            module.getInputs().forEach((name, object) -> {
+                System.out.println("\t input: "+name);
+            });
+        };
+
+        PyPreprocessor.register(() -> moduleInputLogger);
+
+        Future<CommandModule> module = ij.command().run("pyimagej.MyCommand", true);
 
         System.out.println(module);
 

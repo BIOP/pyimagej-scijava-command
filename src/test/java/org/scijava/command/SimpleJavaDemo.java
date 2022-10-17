@@ -25,6 +25,7 @@ import net.imagej.ImageJ;
 import org.junit.After;
 import org.junit.Test;
 import org.scijava.module.Module;
+import org.scijava.plugin.Parameter;
 import org.scijava.processor.PyPreprocessor;
 
 import java.util.HashMap;
@@ -40,9 +41,14 @@ public class SimpleJavaDemo {
         // create the ImageJ application context with all available services
         ij = new ImageJ();
 
+        Parameter nameParam = PyParameterBuilder.Builder()
+                .label("Name :")
+                .description("Please enter your name")
+                .get();
+
         new PyCommandBuilder()
                 .name("pyimagej.MyCommand")
-                .input("name", String.class)
+                .input("name", String.class, nameParam)
                 .input("repeat", Integer.class)
                 //.input("image", ImagePlus.class)
                 .output("greetings", String.class)

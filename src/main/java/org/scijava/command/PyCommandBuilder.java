@@ -22,6 +22,8 @@
 package org.scijava.command;
 
 import org.scijava.Context;
+import org.scijava.ItemIO;
+import org.scijava.ItemVisibility;
 import org.scijava.Priority;
 import org.scijava.UIDetails;
 import org.scijava.plugin.*;
@@ -34,11 +36,13 @@ import java.util.function.Function;
 public class PyCommandBuilder {
 
     public PyCommandBuilder() {
-        DynamicCommand dc;
+
     }
 
     String name;
     String menuPath;
+    String label;
+    String description = "";
 
     public PyCommandBuilder name(String name) {
         this.name = name;
@@ -47,31 +51,69 @@ public class PyCommandBuilder {
 
     Map<String, Class<?>> inputsDefinition = new HashMap<>();
     Map<String, Object> inputsDefaultValue = new HashMap<>();
+    Map<String, Parameter> inputsParameter = new HashMap<>();
     Map<String, Class<?>> outputsDefinition = new HashMap<>();
     Map<String, Object> outputsDefaultValue = new HashMap<>();
+    Map<String, Parameter> outputsParameter = new HashMap<>();
     Function<Map<String, Object>, Map<String, Object>> command;
 
     public PyCommandBuilder input(String name, Class<?> inputClass) {
         inputsDefinition.put(name, inputClass);
         inputsDefaultValue.put(name, null);
+        Parameter p = PyParameterBuilder.defaultInputParameter();
+        inputsParameter.put(name, p);
         return this;
     }
 
     public PyCommandBuilder output(String name, Class<?> outputClass) {
         outputsDefinition.put(name, outputClass);
         outputsDefaultValue.put(name, null);
+        Parameter p = PyParameterBuilder.defaultOutputParameter();
+        outputsParameter.put(name, p);
         return this;
     }
 
     public PyCommandBuilder input(String name, Class<?> inputClass, Object defaultValue) {
         inputsDefinition.put(name, inputClass);
         inputsDefaultValue.put(name, defaultValue);
+        Parameter p = PyParameterBuilder.defaultInputParameter();
+        inputsParameter.put(name, p);
         return this;
     }
 
     public PyCommandBuilder output(String name, Class<?> outputClass, Object defaultValue) {
         outputsDefinition.put(name, outputClass);
         outputsDefaultValue.put(name, defaultValue);
+        Parameter p = PyParameterBuilder.defaultOutputParameter();
+        outputsParameter.put(name, p);
+        return this;
+    }
+
+    public PyCommandBuilder input(String name, Class<?> inputClass, Parameter p) {
+        inputsDefinition.put(name, inputClass);
+        inputsDefaultValue.put(name, null);
+        inputsParameter.put(name, p);
+        return this;
+    }
+
+    public PyCommandBuilder output(String name, Class<?> outputClass, Parameter p) {
+        outputsDefinition.put(name, outputClass);
+        outputsDefaultValue.put(name, null);
+        outputsParameter.put(name, p);
+        return this;
+    }
+
+    public PyCommandBuilder input(String name, Class<?> inputClass, Object defaultValue, Parameter p) {
+        inputsDefinition.put(name, inputClass);
+        inputsDefaultValue.put(name, defaultValue);
+        inputsParameter.put(name, p);
+        return this;
+    }
+
+    public PyCommandBuilder output(String name, Class<?> outputClass, Object defaultValue, Parameter p) {
+        outputsDefinition.put(name, outputClass);
+        outputsDefaultValue.put(name, defaultValue);
+        outputsParameter.put(name, p);
         return this;
     }
 
@@ -82,6 +124,16 @@ public class PyCommandBuilder {
 
     public PyCommandBuilder menuPath(String menuPath) {
         this.menuPath = menuPath;
+        return this;
+    }
+
+    public PyCommandBuilder label(String label) {
+        this.label = label;
+        return this;
+    }
+
+    public PyCommandBuilder description(String description) {
+        this.description = description;
         return this;
     }
 
@@ -104,12 +156,12 @@ public class PyCommandBuilder {
 
             @Override
             public String label() {
-                return name;
+                return label;
             }
 
             @Override
             public String description() {
-                return "";
+                return description;
             }
 
             @Override
@@ -179,8 +231,11 @@ public class PyCommandBuilder {
                     outputsDefinition,
                     inputsDefaultValue,
                     outputsDefaultValue,
+                    inputsParameter,
+                    outputsParameter,
                     command);
         ctx.getService(PluginService.class).addPlugin(pci);
     }
+
 
 }

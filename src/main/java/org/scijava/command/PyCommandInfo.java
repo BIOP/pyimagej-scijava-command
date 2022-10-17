@@ -50,6 +50,8 @@ public class PyCommandInfo extends CommandInfo {
                          Map<String, Class<?>> outputsDefinition,
                          Map<String, Object> inputsDefaults,
                          Map<String, Object> outputsDefaults,
+                         Map<String, Parameter> inputsParameters,
+                         Map<String, Parameter> outputsParameters,
                          Function<Map<String, Object>, Map<String, Object>> command)
     {
         super(null, name, null, annotation);
@@ -98,105 +100,10 @@ public class PyCommandInfo extends CommandInfo {
             Field f = creator.get().getClass().getField("dummyContext");
 
             inputsDefinition.forEach((inputName, clazz) -> {
-                Parameter p = new Parameter() {
 
-                    @Override
-                    public Class<? extends Annotation> annotationType() {
-                        return Parameter.class;
-                    }
-
-                    @Override
-                    public String label() {
-                        return inputName;
-                    }
-
-                    @Override
-                    public String description() {
-                        return "";
-                    }
-
-                    @Override
-                    public ItemIO type() {
-                        return ItemIO.INPUT;
-                    }
-
-                    @Override
-                    public ItemVisibility visibility() {
-                        return ItemVisibility.NORMAL;
-                    }
-
-                    @Override
-                    public boolean autoFill() {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean required() {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean persist() {
-                        return true;
-                    }
-
-                    @Override
-                    public String persistKey() {
-                        return "";
-                    }
-
-                    @Override
-                    public String initializer() {
-                        return "";
-                    }
-
-                    @Override
-                    public String validater() {
-                        return "";
-                    }
-
-                    @Override
-                    public String callback() {
-                        return "";
-                    }
-
-                    @Override
-                    public String style() {
-                        return "";
-                    }
-
-                    @Override
-                    public String min() {
-                        return "";
-                    }
-
-                    @Override
-                    public String max() {
-                        return "";
-                    }
-
-                    @Override
-                    public String stepSize() {
-                        return "";
-                    }
-
-                    @Override
-                    public String[] choices() {
-                        return new String[0];
-                    }
-
-                    @Override
-                    public Attr[] attrs() {
-                        return new Attr[0];
-                    }
-
-                    @Override
-                    public int columns() {
-                        return 0;
-                    }
-                };
                 final CommandModuleItem<Object> item =
-                        new PyCommandModuleItem(this, f, clazz, inputsDefaults.get(inputName), p, inputName);
+                        new PyCommandModuleItem(this, f, clazz, inputsDefaults.get(inputName),
+                                inputsParameters.get(inputName), inputName);
 
                 inputMap.put(inputName, item);
                 inputList.add(item);
@@ -204,105 +111,9 @@ public class PyCommandInfo extends CommandInfo {
             // add item to the relevant list (inputs or outputs)
 
             outputsDefinition.forEach((outputName, clazz) -> {
-                Parameter p = new Parameter() {
-
-                    @Override
-                    public Class<? extends Annotation> annotationType() {
-                        return Parameter.class;
-                    }
-
-                    @Override
-                    public String label() {
-                        return outputName;
-                    }
-
-                    @Override
-                    public String description() {
-                        return "";
-                    }
-
-                    @Override
-                    public ItemIO type() {
-                        return ItemIO.OUTPUT;
-                    }
-
-                    @Override
-                    public ItemVisibility visibility() {
-                        return ItemVisibility.NORMAL;
-                    }
-
-                    @Override
-                    public boolean autoFill() {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean required() {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean persist() {
-                        return true;
-                    }
-
-                    @Override
-                    public String persistKey() {
-                        return "";
-                    }
-
-                    @Override
-                    public String initializer() {
-                        return "";
-                    }
-
-                    @Override
-                    public String validater() {
-                        return "";
-                    }
-
-                    @Override
-                    public String callback() {
-                        return "";
-                    }
-
-                    @Override
-                    public String style() {
-                        return "";
-                    }
-
-                    @Override
-                    public String min() {
-                        return "";
-                    }
-
-                    @Override
-                    public String max() {
-                        return "";
-                    }
-
-                    @Override
-                    public String stepSize() {
-                        return "";
-                    }
-
-                    @Override
-                    public String[] choices() {
-                        return new String[0];
-                    }
-
-                    @Override
-                    public Attr[] attrs() {
-                        return new Attr[0];
-                    }
-
-                    @Override
-                    public int columns() {
-                        return 0;
-                    }
-                };
                 final CommandModuleItem<Object> item =
-                        new PyCommandModuleItem(this, f, clazz, outputsDefaults.get(outputName), p, outputName);
+                        new PyCommandModuleItem(this, f, clazz, outputsDefaults.get(outputName),
+                                outputsParameters.get(outputName), outputName);
                 outputMap.put(outputName, item);
                 outputList.add(item);
             });
